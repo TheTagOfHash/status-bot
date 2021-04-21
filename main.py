@@ -11,7 +11,7 @@ async def on_ready():
 
 
 @bot.command(aliases=['presence'])
-@commands.has_permissions(administrator=True)
+# @commands.has_permissions(send_messages=True)
 async def status(ctx, status_type: str, *, msg):
     if ctx.author == bot.user:
         return
@@ -35,8 +35,9 @@ async def status(ctx, status_type: str, *, msg):
 
 
 @bot.command()
-@commands.has_permissions(administrator=True)
-async def statusrole(ctx, role: int, *, checkstring: str):
+# @commands.has_permissions(send_messages=True)
+async def statusrole(ctx, checkstring: str, role: int):
+    removeCount = 0
     if get(ctx.guild.roles, id=role):
         roleObj = get(ctx.guild.roles, id=role)
     else:
@@ -48,12 +49,18 @@ async def statusrole(ctx, role: int, *, checkstring: str):
         for s in member.activities:
             if isinstance(s, discord.CustomActivity) and checkstring in str(s):
                 status_members.append(member)
+            elif roleObj in member.roles:
+                await member.remove_roles(roleObj)
+                removeCount += 1
     if len(status_members) == 0:
         await ctx.send(f":sadge: I couldn't find anybody with \"{checkstring}\" in their status")
+        if removeCount > 0:
+            await ctx.send(f":sadge: I removed role with id `{roleObj.id}` from {removeCount} members")
         return
     for member in status_members:
         await member.add_roles(roleObj)
     await ctx.send(f":AceHeadpat: Added role with id `{roleObj.id}` to {str(len(status_members))} member(s)")
+    if removeCount > 0:
+        await ctx.send(f":sadge: I removed role with id `{roleObj.id}` from {removeCount} members")
 
-
-bot.run("id here ace")
+bot.run("token here")
