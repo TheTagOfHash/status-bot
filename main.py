@@ -36,7 +36,7 @@ async def status(ctx, status_type: str, *, msg):
 
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def statusrole(ctx, checkstring: str, role: int):
+async def statusrole(ctx, role: int, *, checkstring: str):
     removeCount = 0
     if get(ctx.guild.roles, id=role):
         roleObj = get(ctx.guild.roles, id=role)
