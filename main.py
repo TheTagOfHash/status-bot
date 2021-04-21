@@ -11,7 +11,7 @@ async def on_ready():
 
 
 @bot.command(aliases=['presence'])
-# @commands.has_permissions(send_messages=True)
+@commands.has_permissions(administrator=True)
 async def status(ctx, status_type: str, *, msg):
     if ctx.author == bot.user:
         return
@@ -35,7 +35,7 @@ async def status(ctx, status_type: str, *, msg):
 
 
 @bot.command()
-# @commands.has_permissions(send_messages=True)
+@commands.has_permissions(administrator=True)
 async def statusrole(ctx, checkstring: str, role: int):
     removeCount = 0
     if get(ctx.guild.roles, id=role):
